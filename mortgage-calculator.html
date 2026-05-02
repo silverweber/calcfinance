@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Calculator – Monthly Payment &amp; Total Interest (2026)</title>
+  <meta name="description" content="Free mortgage calculator. Find out your monthly mortgage payment, total interest paid, and total cost of your home loan. Supports USD, GBP, EUR, INR currencies." />
+  <meta name="keywords" content="mortgage calculator, home loan calculator, monthly mortgage payment, mortgage interest calculator, home loan EMI" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yourdomain.com/mortgage-calculator.html" />
+  <meta property="og:title" content="Mortgage Calculator – Monthly Payment & Total Interest" />
+  <meta property="og:description" content="Free mortgage payment calculator. Instantly see what you'll pay monthly on your home loan." />
+  <meta property="og:type" content="website" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Mortgage Calculator",
+    "description": "Calculate your monthly mortgage payment, total interest, and total repayment for any home loan",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+    :root {
+      --bg: #f7f4ef;
+      --surface: #ffffff;
+      --surface2: #f2ede6;
+      --border: #e0d8cc;
+      --accent: #2d6a4f;
+      --accent2: #e76f51;
+      --text: #1a1a2e;
+      --muted: #7a6f64;
+      --card-shadow: 0 2px 24px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+      padding: 0 1.5rem;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 58px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 0.25rem; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.8rem; font-weight: 500;
+      padding: 0.35rem 0.75rem; border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-links a.active { color: var(--accent); background: rgba(45,106,79,0.08); }
+
+    .hero {
+      background: linear-gradient(160deg, #1a3a2e 0%, #2d6a4f 50%, #1e5c40 100%);
+      color: #fff; padding: 3.5rem 1.5rem 2.5rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; bottom: -40px; right: -60px;
+      width: 300px; height: 300px;
+      background: rgba(231,111,81,0.15);
+      border-radius: 50%; pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; font-size: 0.72rem; font-weight: 600;
+      padding: 0.3rem 0.9rem; border-radius: 20px; margin-bottom: 1.2rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      line-height: 1.18; margin-bottom: 0.8rem;
+    }
+    .hero h1 em { color: #f9c784; font-style: italic; }
+    .hero p { color: rgba(255,255,255,0.75); font-size: 0.97rem; max-width: 500px; margin: 0 auto; font-weight: 300; }
+
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .ad-banner-wrap {
+      margin-bottom: 1.5rem;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      margin-bottom: 1.5rem;
+    }
+
+    .ad-slot {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 10px; padding: 1rem;
+      text-align: center; color: var(--muted);
+      font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .ad-slot-banner { min-height: 90px; display: flex; align-items: center; justify-content: center; }
+    .ad-slot-rect { min-height: 250px; display: flex; align-items: center; justify-content: center; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.75rem;
+      box-shadow: var(--card-shadow);
+    }
+    .card-title {
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted);
+      margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .card-title::before {
+      content: ''; display: block; width: 3px; height: 14px;
+      background: var(--accent); border-radius: 2px;
+    }
+
+    .field { margin-bottom: 1.25rem; }
+    .field label { display: block; font-size: 0.78rem; font-weight: 500; color: var(--muted); margin-bottom: 0.45rem; }
+    .input-wrap { position: relative; }
+    .input-wrap .prefix {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      color: var(--accent); font-size: 0.9rem; font-weight: 600; pointer-events: none;
+    }
+    .input-wrap input, .input-wrap select {
+      width: 100%; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 0.95rem; font-weight: 500;
+      padding: 0.75rem 1rem 0.75rem 2.4rem;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+    .input-wrap.no-prefix input, .input-wrap.no-prefix select { padding-left: 1rem; }
+    .input-wrap input:focus, .input-wrap select:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(45,106,79,0.12);
+    }
+    .range-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+    input[type="range"] {
+      flex: 1; -webkit-appearance: none; height: 4px;
+      background: var(--border); border-radius: 4px; cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      background: var(--accent); border-radius: 50%;
+    }
+    .range-val { font-size: 0.78rem; font-weight: 600; color: var(--accent); min-width: 50px; text-align: right; }
+
+    .btn-row { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+    .btn {
+      flex: 1; padding: 0.75rem 1rem; border: none; border-radius: 10px;
+      font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-ghost {
+      background: var(--surface2); color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); }
+
+    .results-grid { display: grid; gap: 0.85rem; }
+    .result-item {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1rem 1.25rem;
+    }
+    .result-item.highlight {
+      background: linear-gradient(135deg, rgba(45,106,79,0.08), rgba(231,111,81,0.05));
+      border-color: rgba(45,106,79,0.3);
+    }
+    .result-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.25rem; }
+    .result-value { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--accent); line-height: 1.1; }
+    .result-item:not(.highlight) .result-value { color: var(--text); font-size: 1.4rem; }
+
+    .chart-wrap { margin-top: 1.5rem; }
+    .chart-title { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.85rem; }
+    .donut-wrap { display: flex; align-items: center; gap: 1.5rem; }
+    canvas#donut { flex-shrink: 0; }
+    .legend { display: flex; flex-direction: column; gap: 0.6rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-label { color: var(--muted); }
+    .legend-val { font-weight: 600; color: var(--text); margin-left: auto; padding-left: 1rem; }
+
+    .content-section { margin-top: 1.5rem; }
+    .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+    .content-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.5rem;
+    }
+    .content-card h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--text); }
+    .content-card p, .content-card li { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+    .content-card ul { padding-left: 1.1rem; }
+    .content-card li { margin-bottom: 0.3rem; }
+    .formula-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.75rem 1rem;
+      font-family: 'Courier New', monospace; font-size: 0.82rem;
+      color: var(--accent); margin: 0.75rem 0;
+    }
+    .example-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.5rem; }
+    .example-table th { background: var(--surface2); color: var(--muted); font-weight: 600; text-align: left; padding: 0.5rem 0.75rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .example-table td { padding: 0.5rem 0.75rem; color: var(--text); border-top: 1px solid var(--border); }
+
+    footer { border-top: 1px solid var(--border); padding: 1.5rem; text-align: center; color: var(--muted); font-size: 0.78rem; background: var(--surface); }
+    footer .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .calc-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero { padding: 2rem 1rem 1.5rem; }
+      .page-wrap { padding: 1.5rem 1rem 3rem; }
+    }
+      .nav-links { display: none; }
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .card { animation: fadeUp 0.4s ease both; }
+    .card:nth-child(2) { animation-delay: 0.08s; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="loan-calculator.html" class="nav-logo">CalcFinance</a>
+    <div class="nav-links">
+      <a href="loan-calculator.html">Loan</a>
+      <a href="mortgage-calculator.html" class="active">Mortgage</a>
+      <a href="personal-loan-calculator.html">Personal</a>
+      <a href="emi-calculator.html">EMI</a>
+      <a href="car-loan-calculator.html">Car Loan</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🏠 Home Loan</div>
+  <h1>Mortgage <em>Payment</em> Calculator</h1>
+  <p>Understand your monthly mortgage payment, total interest burden, and full cost of homeownership — before you sign.</p>
+</div>
+
+<div class="page-wrap">
+
+  <div class="ad-banner-wrap">
+    <div class="ad-slot ad-slot-banner">
+      <!-- AdSense: Banner Ad (728×90 or responsive) — Place ad code here -->
+    📢 Advertisement Space — 728×90 Banner
+    </div>
+  </div>
+
+  <div class="calc-grid">
+    <div class="card">
+    <div class="card-title">Mortgage Details</div>
+
+    <div class="field">
+      <label>Currency</label>
+      <div class="input-wrap no-prefix">
+        <select id="currency" onchange="calc()">
+          <optgroup label="── Major Currencies ──">
+            <option value="USD">🇺🇸 USD – US Dollar</option>
+            <option value="EUR">🇪🇺 EUR – Euro</option>
+            <option value="GBP">🇬🇧 GBP – British Pound</option>
+            <option value="JPY">🇯🇵 JPY – Japanese Yen</option>
+            <option value="CNY">🇨🇳 CNY – Chinese Yuan</option>
+            <option value="INR">🇮🇳 INR – Indian Rupee</option>
+            <option value="CAD">🇨🇦 CAD – Canadian Dollar</option>
+            <option value="AUD">🇦🇺 AUD – Australian Dollar</option>
+            <option value="CHF">🇨🇭 CHF – Swiss Franc</option>
+            <option value="HKD">🇭🇰 HKD – Hong Kong Dollar</option>
+            <option value="SGD">🇸🇬 SGD – Singapore Dollar</option>
+          </optgroup>
+          <optgroup label="── Americas ──">
+            <option value="BRL">🇧🇷 BRL – Brazilian Real</option>
+            <option value="MXN">🇲🇽 MXN – Mexican Peso</option>
+            <option value="ARS">🇦🇷 ARS – Argentine Peso</option>
+            <option value="CLP">🇨🇱 CLP – Chilean Peso</option>
+            <option value="COP">🇨🇴 COP – Colombian Peso</option>
+            <option value="PEN">🇵🇪 PEN – Peruvian Sol</option>
+            <option value="UYU">🇺🇾 UYU – Uruguayan Peso</option>
+            <option value="BOB">🇧🇴 BOB – Bolivian Boliviano</option>
+            <option value="PYG">🇵🇾 PYG – Paraguayan Guarani</option>
+            <option value="CRC">🇨🇷 CRC – Costa Rican Colon</option>
+            <option value="GTQ">🇬🇹 GTQ – Guatemalan Quetzal</option>
+            <option value="HNL">🇭🇳 HNL – Honduran Lempira</option>
+            <option value="DOP">🇩🇴 DOP – Dominican Peso</option>
+            <option value="JMD">🇯🇲 JMD – Jamaican Dollar</option>
+            <option value="TTD">🇹🇹 TTD – Trinidad Dollar</option>
+            <option value="BBD">🇧🇧 BBD – Barbadian Dollar</option>
+          </optgroup>
+          <optgroup label="── Europe ──">
+            <option value="NOK">🇳🇴 NOK – Norwegian Krone</option>
+            <option value="SEK">🇸🇪 SEK – Swedish Krona</option>
+            <option value="DKK">🇩🇰 DKK – Danish Krone</option>
+            <option value="PLN">🇵🇱 PLN – Polish Zloty</option>
+            <option value="CZK">🇨🇿 CZK – Czech Koruna</option>
+            <option value="HUF">🇭🇺 HUF – Hungarian Forint</option>
+            <option value="RON">🇷🇴 RON – Romanian Leu</option>
+            <option value="BGN">🇧🇬 BGN – Bulgarian Lev</option>
+            <option value="RSD">🇷🇸 RSD – Serbian Dinar</option>
+            <option value="UAH">🇺🇦 UAH – Ukrainian Hryvnia</option>
+            <option value="TRY">🇹🇷 TRY – Turkish Lira</option>
+            <option value="GEL">🇬🇪 GEL – Georgian Lari</option>
+            <option value="HRK">🇭🇷 HRK – Croatian Kuna</option>
+            <option value="ISK">🇮🇸 ISK – Icelandic Krona</option>
+          </optgroup>
+          <optgroup label="── Middle East ──">
+            <option value="SAR">🇸🇦 SAR – Saudi Riyal</option>
+            <option value="AED">🇦🇪 AED – UAE Dirham</option>
+            <option value="ILS">🇮🇱 ILS – Israeli Shekel</option>
+            <option value="QAR">🇶🇦 QAR – Qatari Riyal</option>
+            <option value="KWD">🇰🇼 KWD – Kuwaiti Dinar</option>
+            <option value="BHD">🇧🇭 BHD – Bahraini Dinar</option>
+            <option value="OMR">🇴🇲 OMR – Omani Rial</option>
+            <option value="JOD">🇯🇴 JOD – Jordanian Dinar</option>
+            <option value="IQD">🇮🇶 IQD – Iraqi Dinar</option>
+            <option value="IRR">🇮🇷 IRR – Iranian Rial</option>
+          </optgroup>
+          <optgroup label="── Africa ──">
+            <option value="EGP">🇪🇬 EGP – Egyptian Pound</option>
+            <option value="ZAR">🇿🇦 ZAR – South African Rand</option>
+            <option value="NGN">🇳🇬 NGN – Nigerian Naira</option>
+            <option value="KES">🇰🇪 KES – Kenyan Shilling</option>
+            <option value="GHS">🇬🇭 GHS – Ghanaian Cedi</option>
+            <option value="TZS">🇹🇿 TZS – Tanzanian Shilling</option>
+            <option value="ETB">🇪🇹 ETB – Ethiopian Birr</option>
+            <option value="MAD">🇲🇦 MAD – Moroccan Dirham</option>
+            <option value="DZD">🇩🇿 DZD – Algerian Dinar</option>
+            <option value="XOF">🌍 XOF – West African CFA</option>
+            <option value="XAF">🌍 XAF – Central African CFA</option>
+            <option value="ZMW">🇿🇲 ZMW – Zambian Kwacha</option>
+            <option value="UGX">🇺🇬 UGX – Ugandan Shilling</option>
+            <option value="MZN">🇲🇿 MZN – Mozambican Metical</option>
+          </optgroup>
+          <optgroup label="── Asia & Pacific ──">
+            <option value="KRW">🇰🇷 KRW – South Korean Won</option>
+            <option value="TWD">🇹🇼 TWD – Taiwan Dollar</option>
+            <option value="THB">🇹🇭 THB – Thai Baht</option>
+            <option value="MYR">🇲🇾 MYR – Malaysian Ringgit</option>
+            <option value="IDR">🇮🇩 IDR – Indonesian Rupiah</option>
+            <option value="PHP">🇵🇭 PHP – Philippine Peso</option>
+            <option value="VND">🇻🇳 VND – Vietnamese Dong</option>
+            <option value="PKR">🇵🇰 PKR – Pakistani Rupee</option>
+            <option value="BDT">🇧🇩 BDT – Bangladeshi Taka</option>
+            <option value="LKR">🇱🇰 LKR – Sri Lankan Rupee</option>
+            <option value="NPR">🇳🇵 NPR – Nepalese Rupee</option>
+            <option value="MMK">🇲🇲 MMK – Myanmar Kyat</option>
+            <option value="KHR">🇰🇭 KHR – Cambodian Riel</option>
+            <option value="KZT">🇰🇿 KZT – Kazakhstani Tenge</option>
+            <option value="NZD">🇳🇿 NZD – New Zealand Dollar</option>
+            <option value="FJD">🇫🇯 FJD – Fijian Dollar</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Home / Property Price</label>
+      <div class="input-wrap">
+        <span class="prefix" id="pfx">$</span>
+        <input type="number" id="amount" value="300000" min="0" oninput="syncRange('amount','rAmount');calc()" placeholder="e.g. 300000" />
+      </div>
+      <div class="range-row">
+        <input type="range" id="rAmount" min="50000" max="5000000" step="10000" value="300000" oninput="syncInput('rAmount','amount');calc()" />
+        <span class="range-val" id="rvAmount">$300,000</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Annual Interest Rate (%)</label>
+      <div class="input-wrap">
+        <span class="prefix">%</span>
+        <input type="number" id="rate" value="6.5" min="0" max="100" step="0.1" oninput="syncRange('rate','rRate');calc()" placeholder="e.g. 6.5" />
+      </div>
+      <div class="range-row">
+        <input type="range" id="rRate" min="0" max="20" step="0.1" value="6.5" oninput="syncInput('rRate','rate');calc()" />
+        <span class="range-val" id="rvRate">6.5%</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Loan Term (Years)</label>
+      <div class="input-wrap">
+        <span class="prefix">yr</span>
+        <input type="number" id="term" value="30" min="0" max="50" step="1" oninput="syncRange('term','rTerm');calc()" placeholder="e.g. 30" />
+      </div>
+      <div class="range-row">
+        <input type="range" id="rTerm" min="1" max="40" step="1" value="30" oninput="syncInput('rTerm','term');calc()" />
+        <span class="range-val" id="rvTerm">30 yrs</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="resetForm()">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Mortgage Results</div>
+
+    <div class="results-grid">
+      <div class="result-item highlight">
+        <div class="result-label">Monthly Mortgage Payment</div>
+        <div class="result-value" id="monthly">$1,896.20</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Total Interest Paid</div>
+        <div class="result-value" id="interest">$382,633</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Total Mortgage Cost</div>
+        <div class="result-value" id="total">$682,633</div>
+      </div>
+    </div>
+
+    <div class="ad-slot ad-slot-rect" style="margin: 1.25rem 0;">
+      <!-- AdSense: Rectangle Ad (300×250) — Place ad code here -->
+      📢 Advertisement Space — 300×250 Rectangle
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Loan Composition</div>
+      <div class="donut-wrap">
+        <canvas id="donut" width="110" height="110"></canvas>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#2d6a4f"></div>
+            <span class="legend-label">Principal</span>
+            <span class="legend-val" id="leg-principal">$300,000</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#e76f51"></div>
+            <span class="legend-label">Interest</span>
+            <span class="legend-val" id="leg-interest">$382,633</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="ad-banner-wrap">
+    <div class="ad-slot ad-slot-banner">
+      <!-- AdSense: Bottom Banner — Place ad code here -->
+    📢 Advertisement Space — Bottom Banner
+    </div>
+  </div>
+
+  <div class="content-section">
+    <div class="content-grid">
+
+      <div class="content-card">
+        <h2>What Is a Mortgage Calculator?</h2>
+        <p>A mortgage calculator helps prospective homebuyers and homeowners understand what their monthly repayment will be on a home loan. Unlike personal loans, mortgages often span 15–30 years, making the total interest amount surprisingly large — sometimes more than the original property price.</p>
+        <p style="margin-top:0.6rem">This tool gives you full visibility before you commit to a lender, helping you budget confidently and compare loan options side-by-side.</p>
+      </div>
+
+      <div class="content-card">
+        <h2>How Mortgage Payments Work</h2>
+        <p>Your monthly mortgage is split between principal repayment and interest. In the early years of a mortgage, most of your payment goes toward interest. As you pay down the balance, more goes toward principal:</p>
+        <div class="formula-box">EMI = P × r(1+r)ⁿ / ((1+r)ⁿ – 1)</div>
+        <p>This is why extra early payments are so powerful — they reduce the principal, which in turn reduces future interest charges dramatically.</p>
+      </div>
+
+      <div class="content-card">
+        <h2>Sample Mortgage Breakdown</h2>
+        <p>A <strong>$300,000</strong> home loan at <strong>6.5%</strong> for <strong>30 years</strong>:</p>
+        <table class="example-table">
+          <thead><tr><th>Metric</th><th>Amount</th></tr></thead>
+          <tbody>
+            <tr><td>Monthly Payment</td><td>$1,896.20</td></tr>
+            <tr><td>Total Interest</td><td>$382,633</td></tr>
+            <tr><td>Total Cost</td><td>$682,633</td></tr>
+            <tr><td>Interest Ratio</td><td>127% of principal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="content-card">
+        <h2>How to Lower Your Mortgage Cost</h2>
+        <ul>
+          <li><strong>Put down a larger deposit</strong> to borrow less and reduce interest from day one.</li>
+          <li><strong>Choose a shorter term</strong> — 15-year mortgages save enormous interest vs 30-year.</li>
+          <li><strong>Overpay when possible</strong> — even $100 extra per month compounds to massive savings.</li>
+          <li><strong>Lock in low rates</strong> during favorable market conditions.</li>
+          <li><strong>Improve your credit score</strong> to qualify for lender's best available rate.</li>
+          <li><strong>Remortgage regularly</strong> to switch to better deals as they become available.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+</div></div>
+
+<footer>
+  <div class="footer-links">
+    <a href="loan-calculator.html">Loan Calculator</a>
+    <a href="mortgage-calculator.html">Mortgage Calculator</a>
+    <a href="personal-loan-calculator.html">Personal Loan</a>
+    <a href="emi-calculator.html">EMI Calculator</a>
+    <a href="car-loan-calculator.html">Car Loan</a>
+  </div>
+  <p>© 2026 CalcFinance · Free mortgage calculators · Not financial advice</p>
+</footer>
+
+<script>
+  const DEFAULTS = { amount: 300000, rate: 6.5, term: 30 };
+
+
+
+  const CURRENCIES = {
+    USD:'$', EUR:'€', GBP:'£', JPY:'¥', CNY:'¥', INR:'₹',
+    CAD:'CA$', AUD:'A$', CHF:'Fr', HKD:'HK$', SGD:'S$',
+    BRL:'R$', MXN:'MX$', ARS:'$', CLP:'$', COP:'$',
+    PEN:'S/.', UYU:'$U', BOB:'Bs', PYG:'₲', CRC:'₡',
+    GTQ:'Q', HNL:'L', DOP:'RD$', JMD:'J$', TTD:'TT$', BBD:'Bds$',
+    NOK:'kr', SEK:'kr', DKK:'kr', PLN:'zł', CZK:'Kč', HUF:'Ft',
+    RON:'lei', BGN:'лв', RSD:'din', UAH:'₴', TRY:'₺',
+    GEL:'₾', HRK:'kn', ISK:'kr',
+    SAR:'﷼', AED:'د.إ', ILS:'₪', QAR:'﷼', KWD:'KD',
+    BHD:'BD', OMR:'﷼', JOD:'JD', IQD:'IQD', IRR:'﷼',
+    EGP:'E£', ZAR:'R', NGN:'₦', KES:'KSh', GHS:'₵',
+    TZS:'TSh', ETB:'Br', MAD:'MAD', DZD:'DA', XOF:'CFA',
+    XAF:'CFA', ZMW:'ZK', UGX:'USh', MZN:'MT',
+    KRW:'₩', TWD:'NT$', THB:'฿', MYR:'RM', IDR:'Rp',
+    PHP:'₱', VND:'₫', PKR:'₨', BDT:'৳', LKR:'₨',
+    NPR:'₨', MMK:'K', KHR:'₭', KZT:'₸', NZD:'NZ$', FJD:'FJ$'
+  };
+  const SUFFIX_CODES = new Set(['KWD','BHD','JOD','IQD','MAD','DZD','XOF','XAF']);
+
+  function getSymbol(code) { return CURRENCIES[code] || code; }
+
+  function fmtCurrency(v) {
+    const code = document.getElementById('currency').value;
+    const sym = getSymbol(code);
+    const abs = Math.abs(v);
+    let num;
+    if (code === 'INR') {
+      if (abs >= 10000000) num = (abs/10000000).toFixed(2) + 'Cr';
+      else if (abs >= 100000) num = (abs/100000).toFixed(2) + 'L';
+      else num = abs.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2});
+    } else {
+      num = abs.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+    return SUFFIX_CODES.has(code) ? (num + ' ' + sym) : (sym + num);
+  }
+
+  function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+  function calc() {
+    const sym = document.getElementById('currency').value;
+    document.getElementById('pfx').textContent = getSymbol(sym);
+    const P = getVal('amount'), annualRate = getVal('rate'), years = getVal('term');
+    const n = years * 12, r = annualRate / 100 / 12;
+
+    if (P <= 0 || years <= 0) { setBlank(); drawDonut(0,0); return; }
+
+    let monthly, totalPay, totalInterest;
+    if (r === 0) {
+      monthly = P / n; totalPay = P; totalInterest = 0;
+    } else {
+      const f = Math.pow(1+r, n);
+      monthly = P * r * f / (f - 1);
+      totalPay = monthly * n;
+      totalInterest = totalPay - P;
+    }
+
+    document.getElementById('monthly').textContent = fmtCurrency(monthly);
+    document.getElementById('interest').textContent = fmtCurrency(totalInterest);
+    document.getElementById('total').textContent = fmtCurrency(totalPay);
+    document.getElementById('leg-principal').textContent = fmtCurrency(P);
+    document.getElementById('leg-interest').textContent = fmtCurrency(totalInterest);
+    document.getElementById('rvAmount').textContent = getSymbol(document.getElementById('currency').value) + P.toLocaleString();
+    document.getElementById('rvRate').textContent = annualRate + '%';
+    document.getElementById('rvTerm').textContent = years + ' yr' + (years!==1?'s':'');
+    drawDonut(P, totalInterest);
+  }
+
+  function setBlank() {
+    ['monthly','interest','total'].forEach(id => document.getElementById(id).textContent = '—');
+  }
+
+  function syncRange(i, r) { const v = parseFloat(document.getElementById(i).value); if (!isNaN(v)) document.getElementById(r).value = Math.min(v, document.getElementById(r).max); }
+  function syncInput(r, i) { document.getElementById(i).value = document.getElementById(r).value; }
+
+  function resetForm() {
+    document.getElementById('amount').value = DEFAULTS.amount;
+    document.getElementById('rate').value = DEFAULTS.rate;
+    document.getElementById('term').value = DEFAULTS.term;
+    document.getElementById('rAmount').value = DEFAULTS.amount;
+    document.getElementById('rRate').value = DEFAULTS.rate;
+    document.getElementById('rTerm').value = DEFAULTS.term;
+    document.getElementById('currency').value = 'USD';
+    calc();
+  }
+
+  function drawDonut(principal, interest) {
+    const canvas = document.getElementById('donut');
+    const ctx = canvas.getContext('2d');
+    const total = principal + interest;
+    const cx = canvas.width/2, cy = canvas.height/2, r = 42, lw = 14;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if (total === 0) { ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.strokeStyle='#e0d8cc'; ctx.lineWidth=lw; ctx.stroke(); return; }
+    const start = -Math.PI/2;
+    const pA = (principal/total)*Math.PI*2;
+    ctx.beginPath(); ctx.arc(cx,cy,r,start,start+pA); ctx.strokeStyle='#2d6a4f'; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
+    if (interest > 0) { ctx.beginPath(); ctx.arc(cx,cy,r,start+pA,start+pA+(interest/total)*Math.PI*2); ctx.strokeStyle='#e76f51'; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke(); }
+    ctx.fillStyle='#1a1a2e'; ctx.font='bold 11px Inter,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(Math.round((principal/total)*100)+'%',cx,cy-7);
+    ctx.fillStyle='#7a6f64'; ctx.font='9px Inter,sans-serif'; ctx.fillText('principal',cx,cy+7);
+  }
+
+  calc();
+</script>
+</body>
+</html>
